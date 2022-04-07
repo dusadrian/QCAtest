@@ -1,3 +1,4 @@
+#include <R_ext/RS.h> 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -53,9 +54,9 @@ void CCubes(const int p_tt[],
     unsigned int estimPI = 10000;
     p_pichart = malloc(posrows * estimPI * sizeof(int));
     memset(p_pichart, false, posrows * estimPI * sizeof(int));
-    p_implicants = calloc(nconds * estimPI, sizeof(int));
-    p_indx = calloc(nconds * estimPI, sizeof(int));
-    p_ck = calloc(estimPI, sizeof(int));
+    p_implicants = R_Calloc(nconds * estimPI, int);
+    p_indx = R_Calloc(nconds * estimPI, int);
+    p_ck = R_Calloc(estimPI, int);
     bool stop_searching = false;
     unsigned int prevfoundPI = 0;    
     unsigned int foundPI = 0;
@@ -225,17 +226,17 @@ void CCubes(const int p_tt[],
     #ifdef SHOW_DEBUG_PROFILE
         const double findingPIsEnd_time = omp_get_wtime();
     #endif
-    int *copy_implicants = calloc(1, sizeof(int));
-    int *p_solutions = calloc(1, sizeof(int));
+    int *copy_implicants = R_Calloc(1, int);
+    int *p_solutions = R_Calloc(1, int);
     int nr = 0, nc = 0; 
-    int *p_tempic = calloc(1, sizeof(int));
+    int *p_tempic = R_Calloc(1, int);
     if ((firstmin || *complex) && solcons == 0) {
         if (solmin > 0) {
-            free(copy_implicants);
+            R_Free(copy_implicants);
             copy_implicants = malloc(nconds * solmin * sizeof(int));
-            free(p_solutions);
+            R_Free(p_solutions);
             p_solutions = malloc(solmin * sizeof(int));
-            free(p_tempic);
+            R_Free(p_tempic);
             p_tempic = malloc(posrows * solmin * sizeof(int));
             for (int c = 0; c < solmin; c++) {
                 p_solutions[c] = indices[c];
@@ -256,9 +257,9 @@ void CCubes(const int p_tt[],
                 p_sorted[i] = i;
             }
             sort_cols(p_implicants, p_sorted, p_ck, nconds, foundPI);
-            free(copy_implicants);
+            R_Free(copy_implicants);
             copy_implicants = malloc(nconds * foundPI * sizeof(int));
-            free(p_tempic);
+            R_Free(p_tempic);
             p_tempic = malloc(posrows * foundPI * sizeof(int));
             for (int c = 0; c < foundPI; c++) {
                 for (int r = 0; r < nconds; r++) {
@@ -268,7 +269,7 @@ void CCubes(const int p_tt[],
                     p_tempic[c * posrows + r] = p_pichart[p_sorted[c] * posrows + r];
                 }
             }
-            free(p_sorted);
+            R_Free(p_sorted);
             if (keeptrying) {
                 find_models(p_tempic, posrows, foundPI, false, k + 1, maxcomb, true, &p_solutions, &nr, &nc);
             }
@@ -283,10 +284,10 @@ void CCubes(const int p_tt[],
             p_sorted[i] = i;
         }
         sort_cols(p_implicants, p_sorted, p_ck, nconds, foundPI);
-        free(copy_implicants);
-        copy_implicants = calloc(nconds * foundPI, sizeof(int));
-        free(p_tempic);
-        p_tempic = calloc(posrows * foundPI, sizeof(int));
+        R_Free(copy_implicants);
+        copy_implicants = R_Calloc(nconds * foundPI, int);
+        R_Free(p_tempic);
+        p_tempic = R_Calloc(posrows * foundPI, int);
         for (int c = 0; c < foundPI; c++) {
             for (int r = 0; r < nconds; r++) {
                 copy_implicants[c * nconds + r] = p_implicants[p_sorted[c] * nconds + r];
@@ -296,8 +297,8 @@ void CCubes(const int p_tt[],
             }
         }
         if (solcons > 0) {
-            int *p_tempindx = calloc(posrows * foundPI, sizeof(int));
-            int *p_tempck = calloc(foundPI, sizeof(int));
+            int *p_tempindx = R_Calloc(posrows * foundPI, int);
+            int *p_tempck = R_Calloc(foundPI, int);
             for (int c = 0; c < foundPI; c++) {
                 for (int r = 0; r < nconds; r++) {
                     p_tempindx[c * nconds + r] = p_indx[p_sorted[c] * nconds + r];
@@ -323,22 +324,22 @@ void CCubes(const int p_tt[],
                 &nr,
                 &nc
             );
-            free(p_tempindx);
-            free(p_tempck);
+            R_Free(p_tempindx);
+            R_Free(p_tempck);
         }
         else if (solmin > 0) {
             nr = solmin;
             find_models(p_tempic, posrows, foundPI, allsol, solmin, maxcomb, false, &p_solutions, &nr, &nc);
         }
-        free(p_sorted);
+        R_Free(p_sorted);
     }
-    free(p_pichart);
-    free(p_implicants);
-    free(p_indx);
-    free(p_ck);
-    free(*models);
-    free(*implicants);
-    free(*pichart);
+    R_Free(p_pichart);
+    R_Free(p_implicants);
+    R_Free(p_indx);
+    R_Free(p_ck);
+    R_Free(*models);
+    R_Free(*implicants);
+    R_Free(*pichart);
     *solrows = nr;
     *solcols = nc;
     *foundPI_ = foundPI;

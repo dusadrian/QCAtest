@@ -36,7 +36,7 @@ void CCubes(const int p_tt[],
             bool *complex,          
             const bool firstmin)    
 {
-    int *p_pichart = NULL, *p_implicants = NULL, *p_indx = NULL, *p_ck = NULL;
+    int *p_pichart, *p_implicants, *p_indx, *p_ck;
     int posrows = 0;
     for (int r = 0; r < ttrows; r++) {
         posrows += p_tt[nconds * ttrows + r];
@@ -252,7 +252,7 @@ void CCubes(const int p_tt[],
         }
         else if (foundPI > 0) { 
             int *p_sorted = R_Calloc(foundPI, int);
-            for (int i = 0; i < foundPI; i++) {
+            for (unsigned int i = 0; i < foundPI; i++) {
                 p_sorted[i] = i;
             }
             sort_cols(p_implicants, p_sorted, p_ck, nconds, foundPI);
@@ -260,7 +260,7 @@ void CCubes(const int p_tt[],
             copy_implicants = R_Calloc(nconds * foundPI, int);
             R_Free(p_tempic);
             p_tempic = R_Calloc(posrows * foundPI, int);
-            for (int c = 0; c < foundPI; c++) {
+            for (unsigned int c = 0; c < foundPI; c++) {
                 for (int r = 0; r < nconds; r++) {
                     copy_implicants[c * nconds + r] = p_implicants[p_sorted[c] * nconds + r];
                 }
@@ -279,7 +279,7 @@ void CCubes(const int p_tt[],
             row_dominance(p_pichart, p_implicants, p_ck, posrows, &foundPI, nconds);
         }
         int *p_sorted = R_Calloc(foundPI, int);
-        for (int i = 0; i < foundPI; i++) {
+        for (unsigned int i = 0; i < foundPI; i++) {
             p_sorted[i] = i;
         }
         sort_cols(p_implicants, p_sorted, p_ck, nconds, foundPI);
@@ -287,7 +287,7 @@ void CCubes(const int p_tt[],
         copy_implicants = R_Calloc(nconds * foundPI, int);
         R_Free(p_tempic);
         p_tempic = R_Calloc(posrows * foundPI, int);
-        for (int c = 0; c < foundPI; c++) {
+        for (unsigned int c = 0; c < foundPI; c++) {
             for (int r = 0; r < nconds; r++) {
                 copy_implicants[c * nconds + r] = p_implicants[p_sorted[c] * nconds + r];
             }
@@ -298,7 +298,7 @@ void CCubes(const int p_tt[],
         if (solcons > 0) {
             int *p_tempindx = R_Calloc(posrows * foundPI, int);
             int *p_tempck = R_Calloc(foundPI, int);
-            for (int c = 0; c < foundPI; c++) {
+            for (unsigned int c = 0; c < foundPI; c++) {
                 for (int r = 0; r < nconds; r++) {
                     p_tempindx[c * nconds + r] = p_indx[p_sorted[c] * nconds + r];
                 }

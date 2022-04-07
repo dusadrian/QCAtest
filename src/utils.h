@@ -171,3 +171,13 @@ bool all_covered(
     const int pirows,
     const unsigned int picols
 );
+
+
+/*
+p_implicants:
+nonredundant ok
+push_PI ok
+resize ok
+sort_cols ok
+row_dominance ok
+*/

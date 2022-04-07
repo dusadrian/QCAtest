@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include "find_models.h"
+#include <R_ext/RS.h> 
 void find_models(
     const int p_pichart[],
     const int pirows,
@@ -15,63 +16,63 @@ void find_models(
     int *nr,
     int *nc) {
     if (k == picols) {
-        int* p_temp = malloc(k * sizeof(int));
+        int* p_temp = R_Calloc(k, int);
         for (int i = 0; i < k; i++) {
             p_temp[i] = i + 1;
         }
-        free(*solutions);
+        R_Free(*solutions);
         *solutions = p_temp;
         *nr = k;
         *nc = 1;
         return;
     }
-    int *p_temp1 = calloc(1, sizeof(int));
-    int *p_temp2 = calloc(1, sizeof(int));
+    int *p_temp1 = R_Calloc(1, int);
+    int *p_temp2 = R_Calloc(1, int);
     if (allsol) {
         int indmat[picols * pirows];
         int mintpis[pirows];
         for (int r = 0; r < pirows; r++) {
             mintpis[r] = 0;
-            for (int c = 0; c < picols; c++) {
+            for (unsigned int c = 0; c < picols; c++) {
                 if (p_pichart[c * pirows + r]) {
                     indmat[r * picols + mintpis[r]] = c;
                     mintpis[r]++;
                 }
             }
         }
-        free(p_temp2);
-        p_temp2 = calloc(picols * mintpis[0], sizeof(int));
-        int *p_cols = calloc(1, sizeof(int)); 
+        R_Free(p_temp2);
+        p_temp2 = R_Calloc(picols * mintpis[0], int);
+        int *p_cols = R_Calloc(1, int); 
         for (int i = 0; i < mintpis[0]; i++) {
             p_temp2[i * picols + indmat[i]] = 1;
         }
         int tempcols = mintpis[0];
         for (int i = 1; i < pirows; i++) {
-            free(p_temp1);
-            p_temp1 = malloc(picols * tempcols * mintpis[i] * sizeof(int));
+            R_Free(p_temp1);
+            p_temp1 = R_Calloc(picols * tempcols * mintpis[i], int);
             for (int j = 0; j < mintpis[i]; j++) {
-                memcpy(&p_temp1[j * tempcols * picols], p_temp2, tempcols * picols * sizeof(int));
+                Memcpy(&p_temp1[j * tempcols * picols], p_temp2, tempcols * picols);
                 for (int tc = 0; tc < tempcols; tc++) {
                     p_temp1[(j * tempcols + tc) * picols + indmat[i * picols + j]] = 1;
                 }
             }
             int temp2cols = tempcols * mintpis[i];
-            free(p_cols);
-            p_cols = malloc(temp2cols * sizeof(int));
+            R_Free(p_cols);
+            p_cols = R_Calloc(temp2cols, int);
             for (int i = 0; i < temp2cols; i++) {
                 p_cols[i] = true;
             }
             int survcols = temp2cols;
             super_rows(p_temp1, picols, &survcols, p_cols);
-            free(p_temp2);
-            p_temp2 = malloc(picols * survcols * sizeof(int));
-            memcpy(p_temp2, p_temp1, picols * survcols * sizeof(int));
+            R_Free(p_temp2);
+            p_temp2 = R_Calloc(picols * survcols, int);
+            Memcpy(p_temp2, p_temp1, picols * survcols);
             tempcols = survcols;
         }
-        free(p_temp1);
-        p_temp1 = calloc(picols * tempcols, sizeof(int));
-        free(p_cols);
-        p_cols = calloc(tempcols, sizeof(int));
+        R_Free(p_temp1);
+        p_temp1 = R_Calloc(picols * tempcols, int);
+        R_Free(p_cols);
+        p_cols = R_Calloc(tempcols, int);
         int maxr = 0;
         for (int c = 0; c < tempcols; c++) {
             for (int r = 0; r < picols; r++) {
@@ -84,8 +85,8 @@ void find_models(
                 }
             }
         }
-        free(p_temp2);
-        p_temp2 = malloc(maxr * tempcols * sizeof(int));
+        R_Free(p_temp2);
+        p_temp2 = R_Calloc(maxr * tempcols, int);
         for (int c = 0; c < tempcols; c++) {
             for (int r = 0; r < maxr; r++) {
                 p_temp2[c * maxr + r] = p_temp1[c * picols + r];
@@ -120,9 +121,9 @@ void find_models(
                 }
             }
         }
-        free(p_cols);
-        free(p_temp1);
-        p_temp1 = malloc(maxr * tempcols * sizeof(int));
+        R_Free(p_cols);
+        R_Free(p_temp1);
+        p_temp1 = R_Calloc(maxr * tempcols, int);
         for (int c = 0; c < tempcols; c++) {
             for (int r = 0; r < maxr; r++) {
                 p_temp1[c * maxr + r] = p_temp2[order[c] * maxr + r];
@@ -132,10 +133,10 @@ void find_models(
         *nc = tempcols;
     }
     else {
-        int solfound = 0;
-        int estimsol = 100;
-        free(p_temp1);
-        p_temp1 = calloc(k * estimsol, sizeof(int));
+        unsigned int solfound = 0;
+        unsigned int estimsol = 100;
+        R_Free(p_temp1);
+        p_temp1 = R_Calloc(k * estimsol, int);
         int tempk[k];
         for (int i = 0; i < k; i++) {
             tempk[i] = i; 
@@ -182,16 +183,16 @@ void find_models(
             }
         }
         if (solfound > 0) {
-            p_temp1 = realloc(p_temp1, k * solfound * sizeof(int)); 
+            p_temp1 = Realloc(p_temp1, k * solfound, int);
         }
         else {
-            free(p_temp1);
-            p_temp1 = calloc(1, sizeof(int));
+            R_Free(p_temp1);
+            p_temp1 = R_Calloc(1, int);
         }
         *nr = k;
         *nc = solfound;
     }
-    free(p_temp2);
-    free(*solutions);
+    R_Free(p_temp2);
+    R_Free(*solutions);
     *solutions = p_temp1;
 }

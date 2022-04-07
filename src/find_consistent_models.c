@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include "find_consistent_models.h"
 #include "utils.h"
+#include "utils.h"
+#include <R_ext/RS.h> 
 void find_consistent_models(
     const int p_implicants[],
     const int indx[],
@@ -23,18 +25,18 @@ void find_consistent_models(
     int **solutions,
     int *nr,
     int *nc) {
-    int estimsol = 1000;
-    int maxk = posrows;
+    unsigned int estimsol = 1000;
+    unsigned int maxk = posrows;
     if (foundPI < maxk) {
         maxk = foundPI;
     }
     if (soldepth < maxk && soldepth > 0) {
         maxk = soldepth;
     }
-    int *p_sol = calloc(maxk * estimsol, sizeof(int));
-    int *cksol = calloc(estimsol, sizeof(int));
-    int solfound = 0;
-    int prevfound = 0;
+    int *p_sol = R_Calloc(maxk * estimsol, int);
+    int *cksol = R_Calloc(estimsol, int);
+    unsigned int solfound = 0;
+    unsigned int prevfound = 0;
     bool keep_searching = true;
     int k = 1;
     double counter = 1;
@@ -92,11 +94,11 @@ void find_consistent_models(
         prevfound = solfound;
         k += 1;
     }
-    int *p_tempmat = calloc(1, sizeof(int));
+    int *p_tempmat = R_Calloc(1, int);
     if (solfound > 0) {
         int finalrows = cksol[solfound - 1];
-        free(p_tempmat);
-        p_tempmat = calloc(finalrows * solfound, sizeof(int));
+        R_Free(p_tempmat);
+        p_tempmat = R_Calloc(finalrows * solfound, int);
         for (int c = 0; c < solfound; c++) {
             for (int r = 0; r < cksol[c]; r++) {
                 p_tempmat[c * finalrows + r] = p_sol[c * maxk + r] + 1; 
@@ -105,8 +107,8 @@ void find_consistent_models(
         *nr = finalrows;
         *nc = solfound;
     }
-    free(p_sol);
-    free(cksol);
-    free(*solutions);
+    R_Free(p_sol);
+    R_Free(cksol);
+    R_Free(*solutions);
     *solutions = p_tempmat;
 }

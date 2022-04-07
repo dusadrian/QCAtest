@@ -5,18 +5,24 @@
 #include <string.h>
 #include <stdio.h>
 #include "utils.h"
-void resize(int **array, const int rows, const unsigned int newcols, const unsigned int oldcols) {
-    int* tmp = calloc(rows * newcols, sizeof(int));
-    int cols = (newcols > oldcols) ? oldcols : newcols;
-    for (int i = 0; i < rows * cols; i++) {
+#include <R_ext/RS.h> 
+void resize(
+    int **array,
+    const int rows,
+    const unsigned int newcols,
+    const unsigned int oldcols
+) {
+    int* tmp = R_Calloc(rows * newcols, int);
+    unsigned int cols = (newcols > oldcols) ? oldcols : newcols;
+    for (unsigned int i = 0; i < rows * cols; i++) {
         *(tmp + i) = *(*array + i);
     }
-    free(*array);
+    R_Free(*array);
     *array = tmp;   
 }
 bool too_complex(const unsigned int foundPI, const int solmin, const double maxcomb) {
     double result = 1;
-    int n = foundPI;
+    unsigned int n = foundPI;
     int k = solmin;
     for (int i = 1; i <= k; i++) {
         result *= n - (k - i);
@@ -358,7 +364,7 @@ bool all_covered(const int p_pichart[], const int pirows, const unsigned int pic
     int r = 0;
     while (r < pirows && allrows) {
         bool covered = false;
-        int c = 0;
+        unsigned int c = 0;
         while (c < picols && !covered) {
             covered = p_pichart[c * pirows + r];
             c++;

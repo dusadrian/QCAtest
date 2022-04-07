@@ -52,8 +52,7 @@ void CCubes(const int p_tt[],
     }
     get_noflevels(noflevels, p_tt, nconds, ttrows);
     unsigned int estimPI = 10000;
-    p_pichart = malloc(posrows * estimPI * sizeof(int));
-    memset(p_pichart, false, posrows * estimPI * sizeof(int));
+    p_pichart = R_Calloc(posrows * estimPI, int);
     p_implicants = R_Calloc(nconds * estimPI, int);
     p_indx = R_Calloc(nconds * estimPI, int);
     p_ck = R_Calloc(estimPI, int);
@@ -233,11 +232,11 @@ void CCubes(const int p_tt[],
     if ((firstmin || *complex) && solcons == 0) {
         if (solmin > 0) {
             R_Free(copy_implicants);
-            copy_implicants = malloc(nconds * solmin * sizeof(int));
+            copy_implicants = R_Calloc(nconds * solmin, int);
             R_Free(p_solutions);
-            p_solutions = malloc(solmin * sizeof(int));
+            p_solutions = R_Calloc(solmin, int);
             R_Free(p_tempic);
-            p_tempic = malloc(posrows * solmin * sizeof(int));
+            p_tempic = R_Calloc(posrows * solmin, int);
             for (int c = 0; c < solmin; c++) {
                 p_solutions[c] = indices[c];
                 for (int r = 0; r < nconds; r++) {
@@ -252,15 +251,15 @@ void CCubes(const int p_tt[],
             foundPI = solmin;
         }
         else if (foundPI > 0) { 
-            int *p_sorted = malloc(foundPI * sizeof(int));
+            int *p_sorted = R_Calloc(foundPI, int);
             for (int i = 0; i < foundPI; i++) {
                 p_sorted[i] = i;
             }
             sort_cols(p_implicants, p_sorted, p_ck, nconds, foundPI);
             R_Free(copy_implicants);
-            copy_implicants = malloc(nconds * foundPI * sizeof(int));
+            copy_implicants = R_Calloc(nconds * foundPI, int);
             R_Free(p_tempic);
-            p_tempic = malloc(posrows * foundPI * sizeof(int));
+            p_tempic = R_Calloc(posrows * foundPI, int);
             for (int c = 0; c < foundPI; c++) {
                 for (int r = 0; r < nconds; r++) {
                     copy_implicants[c * nconds + r] = p_implicants[p_sorted[c] * nconds + r];
@@ -279,7 +278,7 @@ void CCubes(const int p_tt[],
         if (rowdom) {
             row_dominance(p_pichart, p_implicants, p_ck, posrows, &foundPI, nconds);
         }
-        int *p_sorted = malloc(foundPI * sizeof(int));
+        int *p_sorted = R_Calloc(foundPI, int);
         for (int i = 0; i < foundPI; i++) {
             p_sorted[i] = i;
         }

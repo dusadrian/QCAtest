@@ -164,7 +164,7 @@ Adrian Dusa
 \references{
 Cebotari, V.; Vink, M.P. (2013) \dQuote{A Configurational Analysis of Ethnic
 Protest in Europe}. \emph{International Journal of Comparative Sociology}
-vol.54, no.4, pp.298-324.
+vol.54, no.4, pp.298-324, \doi{10.1177/0020715213508567}.
 
 Cebotari, V.; Vink, M.P. (2015) \dQuote{Replication Data for: A configurational
 analysis of ethnic protest in Europe}, Harvard Dataverse, V2, \doi{10.7910/DVN/PT2IB9}.
@@ -194,7 +194,8 @@ Qualitative Comparative Analysis (QCA) and Related Techniques}, SAGE.
 
 Ragin, C.C.; Strand, S.I. (2008) \dQuote{Using Qualitative Comparative 
 Analysis to Study Causal Order: Comment on Caren and Panofsky (2005).} 
-\emph{Sociological Methods & Research} vol.36, no.4, pp.431-441.
+\emph{Sociological Methods & Research} vol.36, no.4, pp.431-441,
+\doi{10.1177/0049124107313903}.
 
 Rihoux, B.; De Meur, G. (2009) \dQuote{Crisp Sets Qualitative Comparative Analysis
 (mvQCA)}, in Rihoux, B.; Ragin, C. (eds.) \emph{Configurational Comparative Methods.

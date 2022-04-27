@@ -1,4 +1,4 @@
-#include <stdbool.h>
+#include <R_ext/Boolean.h>
 #include "super_rows.h"
 #include "utils.h"
 #include "consistent_solution.h"
@@ -14,7 +14,7 @@ void find_consistent_models(
     const int posrows,
     const double solcons,
     const double solcov,
-    const bool allsol,
+    const Rboolean allsol,
     const int soldepth,
     const unsigned int foundPI,
     const double maxcomb,

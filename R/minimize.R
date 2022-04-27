@@ -1,3 +1,28 @@
+# Copyright (c) 2016 - 2022, Adrian Dusa
+# All rights reserved.
+# 
+# Redistribution and use in source and binary forms, with or without
+# modification, in whole or in part, are permitted provided that the
+# following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * The names of its contributors may NOT be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ADRIAN DUSA BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 `minimize` <- function(
     input, include = "", dir.exp = NULL, details = FALSE, pi.cons = 0,
     sol.cons = 0, all.sol = FALSE, row.dom = FALSE, min.pin = FALSE,
@@ -295,7 +320,7 @@
         collapse = collapse,
         curly = curly
     )
-    expressions <- .Call("C_QMC", expressions, noflevels, PACKAGE = "QCAtest")
+    expressions <- .Call("C_QMC", expressions, noflevels, PACKAGE = "QCA")
     if (is.element("simplify", names(dots))) {
         expressions <- admisc::sortExpressions(expressions)
     }
@@ -322,7 +347,7 @@
     if (incl.rem) {
         pos.matrix <- inputt
         if (method == "QMC") {
-            expressions <- .Call("C_QMC", createMatrix(noflevels)[-output$negatives, , drop = FALSE] + 1, noflevels, PACKAGE = "QCAtest")
+            expressions <- .Call("C_QMC", createMatrix(noflevels)[-output$negatives, , drop = FALSE] + 1, noflevels, PACKAGE = "QCA")
             setColnames(expressions, colnames(inputt))
         }
         else if (method == "eQMC") {
@@ -332,7 +357,7 @@
             else {
                 expressions <- sort.int(findSupersets(pos.matrix, noflevels + 1))
             }
-            expressions <- .Call("C_removeRedundants", expressions, noflevels, mbaseplus, PACKAGE = "QCAtest")
+            expressions <- .Call("C_removeRedundants", expressions, noflevels, mbaseplus, PACKAGE = "QCA")
             expressions <- admisc::sortExpressions(getRow(expressions, noflevels + 1))
             setColnames(expressions, colnames(inputt))
         }
@@ -358,7 +383,7 @@
                             max.comb = max.comb,
                             first.min = first.min,
                             keep.trying = keep.trying),
-                            PACKAGE = "QCAtest")
+                            PACKAGE = "QCA")
         }
         callist$expressions <- expressions
         p.sol <- do.call("getSolution", callist)
@@ -455,6 +480,9 @@
             show.cases = TRUE,
             cases = expr.cases
         )
+        if (poflist$use.letters) {
+            names(poflist$data)[seq(length(conditions))] <- LETTERS[seq(length(conditions))]
+        }
         if (length(output$solution) > 1) {
             poflist$solution.list <- output$solution
             poflist$essential <- output$essential
@@ -574,7 +602,7 @@
                     p.sol$sol.matrix,
                     output$SA,
                     as.integer(noflevels),
-                    PACKAGE = "QCAtest"
+                    PACKAGE = "QCA"
                 )
                 EClist <- result[[1]]
                 isols <- result[[2]]
@@ -604,7 +632,7 @@
                             "C_QMC",
                             pos.matrix.i.sol,
                             noflevels,
-                            PACKAGE = "QCAtest"
+                            PACKAGE = "QCA"
                         )
                         callist$expressions <- expressions
                         i.sol.index <- do.call("getSolution", callist)

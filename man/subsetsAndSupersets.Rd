@@ -159,7 +159,7 @@ implicant.
 \references{
 Cebotari, V.; Vink, M.P. (2013) \dQuote{A Configurational Analysis of Ethnic
 Protest in Europe}. \emph{International Journal of Comparative Sociology}
-vol.54, no.4, pp.298-324.
+vol.54, no.4, pp.298-324, \doi{10.1177/0020715213508567}.
 
 Cebotari, Victor; Vink, Maarten Peter (2015) \emph{Replication Data for: A
 configurational analysis of ethnic protest in Europe}, Harvard Dataverse, V2,

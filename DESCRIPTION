@@ -1,6 +1,6 @@
-Package: QCAtest
-Version: 3.16
-Date: 2022-04-07
+Package: QCA
+Version: 3.16-5
+Date: 2022-04-27
 Title: Qualitative Comparative Analysis
 Authors@R: c(person(given = "Adrian", family = "Dusa",
                     role = c("aut", "cre", "cph"),

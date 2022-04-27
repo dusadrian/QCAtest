@@ -1,4 +1,4 @@
-\name{QCAtest-internal}
+\name{QCA internal functions}
 
 \alias{.onAttach}
 

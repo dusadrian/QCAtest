@@ -7,7 +7,7 @@ importFrom("grDevices", "dev.cur", "dev.new", "dev.list")
 importFrom("graphics", "abline", "axis", "box", "mtext", "par", "title", "text")
 importFrom("methods", "is")
 
-useDynLib(QCAtest, .registration = TRUE)
+useDynLib(QCA, .registration = TRUE)
 
 export(.onAttach,
     allExpressions,

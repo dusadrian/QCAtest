@@ -1,12 +1,35 @@
-#include <stdio.h>
-#include <stdlib.h>
+/*
+Copyright (c) 2016 - 2022, Adrian Dusa
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, in whole or in part, are permitted provided that the
+following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * The names of its contributors may NOT be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL ADRIAN DUSA BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+#include <R_ext/RS.h>
+#include <R_ext/Boolean.h>
 #include <math.h>
-#include <string.h>
-#include <stdio.h>
 #include "find_consistent_models.h"
 #include "utils.h"
-#include "utils.h"
-#include <R_ext/RS.h> 
 void find_consistent_models(
     const int p_implicants[],
     const int indx[],
@@ -18,15 +41,16 @@ void find_consistent_models(
     const int posrows,
     const double solcons,
     const double solcov,
-    const bool allsol,
+    const Rboolean allsol,
     const int soldepth,
     const unsigned int foundPI,
     const double maxcomb,
     int **solutions,
     int *nr,
-    int *nc) {
+    int *nc
+) {
     unsigned int estimsol = 1000;
-    unsigned int maxk = posrows;
+    int maxk = posrows;
     if (foundPI < maxk) {
         maxk = foundPI;
     }
@@ -37,7 +61,7 @@ void find_consistent_models(
     int *cksol = R_Calloc(estimsol, int);
     unsigned int solfound = 0;
     unsigned int prevfound = 0;
-    bool keep_searching = true;
+    Rboolean keep_searching = true;
     int k = 1;
     double counter = 1;
     while (keep_searching && k <= maxk) {
@@ -48,11 +72,11 @@ void find_consistent_models(
             tempk[k - 1] -= 1; 
             int e = 0;
             int h = k;
-            bool last = (foundPI == k);
+            Rboolean last = (foundPI == k);
             while (keep_searching && ((tempk[0] != foundPI - k) || last)) {
                 increment(k, &e, &h, foundPI + last, tempk, 0);
                 last = false;
-                bool nonred = true;
+                Rboolean nonred = true;
                 int i = 0;
                 while (i < prevfound && nonred) {
                 int sumeq = 0;
